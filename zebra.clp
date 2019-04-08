@@ -19,7 +19,8 @@
 * A template which, in "a," stores the type of fact to be asserted (either house color, nationality, pet, drink, 
 * or cigarette type), in "v," stores the value corresponding to that fact type (like a specific house color (ex: red), 
 * nationality (ex: englishman), pet (ex: dog), drink (ex: milk), or cigarette type (ex: old-golds)), and in "h"
-* stores the house position of the person with this characteristic, which ranges from 1-5 in this given problem.
+* stores the house position of the person with this characteristic, which ranges from 1-5 in this given problem. The house
+* position must be an integer value.
 */
 (deftemplate avh  (slot a)  (slot v)  (slot h (type INTEGER))) 
 
