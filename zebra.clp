@@ -115,7 +115,7 @@
   ; The milk drinker lives in the middle house.
   /*
   * The milk-drinker lives at some house location (?d2) which is not at the same location as the coffee-drinker's house (?d1) 
-  * and is equal to 3 (the middle index value).
+  * and is equal to 3 (the middle house index value).
   */
   (avh (a drink) (v milk) (h ?d2&~?d1&3))
 
@@ -273,7 +273,7 @@
 */
 (defrule print-solution
   /*
-  * Stores each of the solution facts into the variables in their correct order so that the solution
+  * Stores each of the solution facts into variables in their correct order so that the solution
   * can be printed later. Note that the following variables are not the same as those stored in the 
   * previous rule (find-solution), but instead are ordered by house location.
   */
