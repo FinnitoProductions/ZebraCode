@@ -1,3 +1,9 @@
+/*
+* Commented by Finn Frankis
+* March 16, 2019
+* Finds and prints the solution to the Zebra problem using the rule engine by defining a solution rule
+* which can only trigger if all of the facts presented in the problem have been asserted. 
+*/
 ;;;======================================================
 ;;;   Who Drinks Water? And Who owns the Zebra?
 ;;;     
@@ -29,8 +35,8 @@
 * those given in the problem statement. After the solution has been found, asserts a series of facts 
 * representing the solution set.
 *
-* Will be added to the agenda for each assertion by the generate-combinations rule, but will only trigger if the 
-* combinations currently asserted satisfies each of the requirements, as dictated by the problems.
+* Will only be triggered if all the facts required to satisfy the problem has been asserted; a combination out of 
+* the facts asserted must meet each of the requirements, as dictated by the problem statement.
 *
 * Because there are five houses and each person is of a different nationality, likes a different drink, owns a different 
 * pet, and smokes a different type of cigarette, and because each house is of a different color, the pattern-matching
@@ -79,7 +85,8 @@
   */
   (avh (a nationality) (v englishman) (h ?n1))
   /*
-  * The red house is at some house location (?c1) which is the same as the Englishman's (?n1).
+  * The red house is at some house location (?c1) which is the same as the Englishman's (?n1) because the Englishman lives
+  * in the red house.
   */
   (avh (a color) (v red) (h ?c1 & ?n1))
 
@@ -90,7 +97,8 @@
   */
   (avh (a nationality) (v spaniard) (h ?n2 & ~?n1)) 
   /*
-  * The dog-owner lives at some house location (?p1) which is at the same place as the Spaniard's house (?n2).
+  * The dog-owner lives at some house location (?p1) which is at the same place as the Spaniard's house (?n2) because
+  * the Spaniard owns the dog.
   */
   (avh (a pet) (v dog) (h ?p1 & ?n2))
 
@@ -107,7 +115,8 @@
   */
   (avh (a color) (v green) (h ?c3&~?c2&~?c1&:(= (+ ?c2 1) ?c3)))
   /*
-  * The coffee-drinker lives at some house location (?d1) which is at the same location as the green house (?c3).
+  * The coffee-drinker lives at some house location (?d1) which is at the same location as the green house (?c3) because
+  * the coffee drinker lives in the green house.
   */
   (avh (a drink) (v coffee) (h ?d1&?c3)) 
 
@@ -127,7 +136,7 @@
   (avh (a smokes) (v old-golds) (h ?s1))
   /*
   * The snails-owner lives at some house location (?p2) at a different location to the dog-owner's house (?p1) but at the
-  * same location as that of the Old Golds-smoker. (?s1).
+  * same location as that of the Old Golds-smoker (?s1) because the Old Golds-smoker owns snails.
   */
   (avh (a pet) (v snails) (h ?p2&~?p1&?s1)) 
 
@@ -139,7 +148,8 @@
   (avh (a nationality) (v ukrainian) (h ?n3&~?n2&~?n1))
   /*
   * The tea-drinker lives at some house location (?d3) not the same as the house of the milk-drinker (?d2) or
-  * the house of the coffee-drinker (?d1). It is at the same location as that of the Ukranian (?n3).
+  * the house of the coffee-drinker (?d1). It is at the same location as that of the Ukranian (?n3) because 
+  * the Ukranian drinks tea.
   */
   (avh (a drink) (v tea) (h ?d3&~?d2&~?d1&?n3))
 
@@ -150,6 +160,7 @@
   * nor the Englishman's (?n1).
   */
   (avh (a nationality) (v norwegian) (h ?n4&~?n3&~?n2&~?n1&1)) 
+
 
   ; Chesterfields smoker lives next door to the fox owner.
   /*
@@ -175,9 +186,10 @@
   /*
   * The orange juice-drinker lives at some house location (?d4) not the same as the location of 
   * the tea-drinker (?d3), the milk-drinker (?d2), nor the coffee-drinker (?d1).
-  * Furthermore, the orange juice-drinker lives at the same house location as the Lucky Strike-smoker (?s3).
+  * Furthermore, the orange juice-drinker lives at the same house location as the Lucky Strike-smoker (?s3) because the 
+  * Lucky Strike smoker drinks orange juice.
   */
-  (avh (a drink) (v orange-juice) (h ?d4&~?d3&~?d2&~?d1&?s3)) 
+  (avh (a drink) (v orange-juice) (h ?d4&~?d3&~?d2&~?d1&?s3))
 
 
   ; The Japanese smokes Parliaments
@@ -189,7 +201,7 @@
   /*
   * The Parliaments-smoker lives at some house location (?s4) not the same as that of the Lucky Strike-smoker (?s3),
   * the Chesterfield-smoker (?s2), nor the Old Golds smoker (?s1). Furthermore, this location is the same as that of the
-  * Japanese.
+  * Japanese because the Japanese man smokes Parliaments.
   */
   (avh (a smokes) (v parliaments) (h ?s4&~?s3&~?s2&~?s1&?n5))
 
@@ -210,7 +222,8 @@
   (avh (a smokes) (v kools) (h ?s5&~?s4&~?s3&~?s2&~?s1&:(or (= ?p4 (- ?s5 1)) (= ?p4 (+ ?s5 1)))))
   /*
   * The yellow house is at some house location (?c4) which is not the same as the green house (?c3), the ivory house (?c2),
-  * nor the red house (?c1). However, the yellow house's location is the same as that of the Kools-smoker's house (?s5).
+  * nor the red house (?c1). However, the yellow house's location is the same as that of the Kools-smoker's house (?s5) because
+  * the Kools smoker lives in a yellow house.
   */
   (avh (a color) (v yellow) (h ?c4&~?c3&~?c2&~?c1&?s5))
 
@@ -218,7 +231,8 @@
   ; The Norwegian lives next to the blue house.
   /*
   * The blue house is at some house location (?c5) which is not the same as that of the yellow house (?c4), the green house (?c3), 
-  * the ivory house (?c2), nor the red house (?c1).
+  * the ivory house (?c2), nor the red house (?c1). Also, the blue house is either one to the left or one to to the right of the
+  * Norwegian's house (?n4) because the Norwegian lives next to the blue house.
   */
   (avh (a color) (v blue) (h ?c5&~?c4&~?c3&~?c2&~?c1&:(or (= ?c5 (- ?n4 1)) (= ?c5 (+ ?n4 1)))))
   
@@ -235,7 +249,7 @@
   (avh (a pet) (v zebra) (h ?p5&~?p4&~?p3&~?p2&~?p1))
   => 
   /*
-  * Asserts the solution set to the problem - because this call only triggers when all the condtions above have
+  * Asserts the solution set to the problem because this call only triggers when all the condtions above have
   * been met, the values stored in each of the variables will each correspond to their solution value.
   */
   (assert (solution nationality englishman ?n1)
@@ -304,7 +318,10 @@
   ?f25 <- (solution smokes ?s5 5)
   =>
   (retract ?f1 ?f2 ?f3 ?f4 ?f5 ?f6 ?f7 ?f8 ?f9 ?f10 ?f11 ?f12 ?f13 ?f14
-           ?f15 ?f16 ?f17 ?f18 ?f19 ?f20 ?f21 ?f22 ?f23 ?f24 ?f25) ; retracts all the solution facts previously asserted to clear out the fact-base
+           ?f15 ?f16 ?f17 ?f18 ?f19 ?f20 ?f21 ?f22 ?f23 ?f24 ?f25) ; retracts all the solution facts previously asserted to clear out the fact-base - unclear why this line is necessary
+  /*
+  * Prints the solution set to the problem in a convenient table format.
+  */
   (printout t "HOUSE | Nationality Color Pet Drink Smokes" crlf)
   (printout t "--------------------------------------------------------------------" crlf)
   (printout t "  1   |" ?n1 " " ?c1 " " ?p1 " " ?d1 " " ?s1 crlf)
@@ -321,6 +338,9 @@
 */ 
 (defrule startup
    =>
+   /*
+   * Introduces the user to the problem statement.
+   */
    (printout t
     "There are five houses, each of a different color, inhabited by men of"  crlf
     "different nationalities, with different pets, drinks, and cigarettes."  crlf
@@ -340,7 +360,8 @@
    /*
    * Asserts each possible value for color, nationality, pet, drink, and cigarette type. Each assertion will trigger 
    * the generate-combinations rule, which will fit the given type of fact and its value into the above avh
-   * template to ensure the find-solution rule will have a solution incorporating all possible permutations.
+   * template with each of the five house positions to ensure the find-solution rule will have a solution 
+   * incorporating all possible permutations.
    */
    (assert (value color red) 
            (value color green) 
@@ -371,17 +392,20 @@
 
 /*
 * After a fact representing a given fact type (house color, nationality, preferred drink, pet, or cigarette type) and 
-* value for that fact type has been asserted, generates all possible combinations for that fact by pairing each piece
-* of information with all possible house locations, fitting into the avh template.
+* value of that fact type has been asserted, generates all possible combinations for that fact by pairing each piece
+* of information with all possible house locations, fitting into the above-defined avh template.
 *
 * After all possible values for each fact type have been asserted, this rule will have ensured that
 * all of those values have been corresponding to all possible house positions to guarantee
 * that there will be a permutation of facts to trigger the find-solution rule.
 */
 (defrule generate-combinations
-   ?f <- (value ?s ?e)
+   ?f <- (value ?s ?e) ; stores the fact into a value so it can be later retracted
    =>
-   (retract ?f) ; retracts the fact after it has been used to keep the fact-base clean
+   (retract ?f) ; retracts the fact after it has been used 
+   /* 
+   * Asserts the given piece of information with all possible house locations to ultimately generate all permutations.
+   */
    (assert (avh (a ?s) (v ?e) (h 1))
            (avh (a ?s) (v ?e) (h 2))
            (avh (a ?s) (v ?e) (h 3))
@@ -397,12 +421,12 @@
 * Runs the rule engine a given number of times, resetting before each run of the engine.
 */
 (deffunction run-n-times (?n)
-  (while (> ?n 0) do
+  (while (> ?n 0) do 
          (reset)
          (run)
-         (bind ?n (- ?n 1))))
+         (bind ?n (- ?n 1)))) 
 
-(run-n-times 1)
+(run-n-times 1) ; runs the program once when the code is executed to solve the problem
 
-(printout t "Elapsed time: " (integer (- (time) ?*time*)) crlf)
+(printout t "Elapsed time: " (integer (- (time) ?*time*)) crlf) ; prints how long the rule engine took to run
 
